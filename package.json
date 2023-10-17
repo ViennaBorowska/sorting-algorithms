@@ -1,7 +1,7 @@
 {
   "name": "sorting-algorithms",
   "version": "1.0.0",
-  "description": "Testing sorting algorithms to collect data for BigO Notation analysis",
+  "description": "Testing algorithms to collect data for BigO Notation analysis",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
