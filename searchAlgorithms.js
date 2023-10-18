@@ -5,9 +5,13 @@ const fs = require("fs");
 if (fs.existsSync("searchAlgRuntimes.csv"))
   fs.unlinkSync("searchAlgRuntimes.csv");
 // create and write a header to the output csv file
-fs.appendFile("searchAlgRuntimes.csv", "Search Type, N, Guesses\n", (err) => {
-  if (err) throw err;
-});
+fs.appendFile(
+  "searchAlgRuntimes.csv",
+  "Search Type, N, Target, Guesses\n",
+  (err) => {
+    if (err) throw err;
+  }
+);
 
 //LINEAR SEARCH
 function linearSearch(array, target) {
@@ -47,6 +51,8 @@ const arraySizes = [
   550000,
 ];
 
+const runs = 10;
+
 for (let n = 0; n < arraySizes.length; n++) {
   //Generate array of numbers
   let testArray = [];
@@ -60,23 +66,38 @@ for (let n = 0; n < arraySizes.length; n++) {
   }
   let randomNumberSelection = getRandom(1, arraySizes[n]);
   console.log(randomNumberSelection);
-  //Call linear search & record data
-  const linearResult = linearSearch(testArray, randomNumberSelection);
 
-  console.log(
-    `The target ${randomNumberSelection} was found after ${linearResult} guesses`
-  );
-  const linearData = `Linear Search: ${arraySizes[n]} - ${linearResult} guesses \n`;
+  let linearTotal = 0;
+  let linearAverage = 0;
+
+  for (let r = 1; r <= runs; r++) {
+    //Call linear search & record data
+    const linearResult = linearSearch(testArray, randomNumberSelection);
+    linearTotal += linearResult;
+    console.log(
+      `Run ${r}: The target ${randomNumberSelection} was found after ${linearResult} guesses`
+    );
+  }
+  linearAverage = linearTotal / runs;
+
+  const linearData = `Linear Search: Size ${arraySizes[n]} | Target = ${randomNumberSelection} | Average Guesses = ${linearAverage} \n`;
   fs.appendFile("searchAlgRuntimes.csv", linearData, (err) => {
     if (err) throw err;
   });
 
+  let binaryTotal = 0;
+  let binaryAverage = 0;
   //Call binary search & record data
-  const binaryResult = binarySearch(testArray, randomNumberSelection);
-  console.log(
-    `The target ${randomNumberSelection} was found after ${binaryResult} guesses.`
-  );
-  const binaryData = `Binary Search: ${arraySizes[n]} - ${binaryResult} guesses \n`;
+  for (let r = 1; r <= runs; r++) {
+    const binaryResult = binarySearch(testArray, randomNumberSelection);
+    binaryTotal += binaryResult;
+    console.log(
+      `Run ${r}: The target ${randomNumberSelection} was found after ${binaryResult} guesses.`
+    );
+  }
+  binaryAverage = binaryTotal / runs;
+
+  const binaryData = `Binary Search: Size ${arraySizes[n]} | Target = ${randomNumberSelection} | Average Guesses =  ${binaryAverage}\n`;
   fs.appendFile("searchAlgRuntimes.csv", binaryData, (err) => {
     if (err) throw err;
   });
