@@ -4,19 +4,16 @@ const { performance } = require("perf_hooks");
 
 // WRITING DATA TO FILE
 // delete output csv file if exists
-if (fs.existsSync("sortingAlgRuntimes.csv"))
-  fs.unlinkSync("sortingAlgRuntimes.csv");
-// create and write a header to the output csv file
-fs.appendFile("sortingAlgRuntimes.csv", "Sort Type, N,runtime\n", (err) => {
-  if (err) throw err;
-});
-
-//Array of array sizes to test
-const arraySizes = [
-  1000, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000,
-  55000, 60000, 65000, 70000, 75000, 80000, 850000, 90000, 100000, 110000,
-  120000, 130000, 140000, 150000, 160000,
-];
+// if (fs.existsSync("sortingAlgRuntimes.csv"))
+//   fs.unlinkSync("sortingAlgRuntimes.csv");
+// // create and write a header to the output csv file
+// fs.appendFile(
+//   "sortingAlgRuntimes.csv",
+//   "Sort Type, N, Average Runtime, Sort Type, N, Average Runtime, Sort Type, N, Average Runtime, Sort Type, N, Average Runtime\n",
+//   (err) => {
+//     if (err) throw err;
+//   }
+// );
 
 //BUBBLE SORT
 function bubbleSort(arr) {
@@ -37,11 +34,11 @@ function bubbleSort(arr) {
 //SELECTION SORT
 function selectionSort(arr) {
   for (let i = 0; i < arr.length; i++) {
-    let min = i; // storing index of min element
+    let min = i;
 
     for (let j = 0; j < arr.length; j++) {
       if (arr[min] > arr[j]) {
-        min = j; // updating index of min element
+        min = j;
       }
     }
     if (i !== min) {
@@ -95,145 +92,121 @@ function mergeSort(arr) {
 //Declare runs
 const runs = 10;
 //run sorts for varying data sizes N
-for (let n = 0; n <= arraySizes.length; n++) {
-  //Declare empty array and fill with random numbers according to n array size
+for (let n = 101000; n <= 200000; n = n + 1000) {
+  console.log("Bubble Sorting with N = ", n);
+  //Declare empty array and fill with random numbers according to n array size and print sort type and n to console
   const randomNumberArr = [];
-  console.log("Sorting with N = ", arraySizes[n]);
-  for (let i = 0; i < arraySizes[n]; i++) {
-    randomNumberArr.push(Math.floor(Math.random() * 100));
+  // console.log("Sorting with N = ", n);
+  for (let i = 0; i < n; i++) {
+    randomNumberArr.push(Math.floor(Math.random() * n));
   }
 
-  //BUBBLE SORT CALLS & CALCULATIONS
-  //Bubble Sort variables to calculate average runtimes (commented for Bubble Sort and repeated for each sort algorithm.)
+  //BUBBLE SORT CALLS & CALCULATIONS (commented for Bubble Sort and repeated for each sort algorithm.)
+  //Bubble Sort variables to calculate average runtimes
   let bubbleTotal = 0;
   let bubbleAverage = 0;
 
-  //Loop through runs to run each alrogithm 10 times on each array size
+  //Loop through runs to run each alrogithm 10 times on each array size - using the same array for all 10 runs with the spread method
   for (let r = 1; r <= runs; r++) {
+    let randomNumberArrCopy = [...randomNumberArr];
     //Record start of each run and print to console
-    let timestart = performance.now();
-    console.log("r = ", r, "starting at", timestart);
+    let bubbleTimestart = performance.now();
     //Call Bubble Sort function
-    bubbleSort(randomNumberArr);
+    bubbleSort(randomNumberArrCopy);
     //Calculate time of each run (time after function - time before function)
-    runtime = performance.now() - timestart;
+    bubbleRuntime = performance.now() - bubbleTimestart;
     //Add each runtime to total
-    bubbleTotal += runtime;
+    bubbleTotal += bubbleRuntime;
   }
-  //Print total to console
-  console.log("Current total: " + bubbleTotal);
   //Calculate average
   bubbleAverage = bubbleTotal / runs;
   //Store runtime data in variable and also print to console
-  let data =
-    "BUBBLE SORT: Size " +
-    String(arraySizes[n]) +
-    ", Average Runtime: " +
-    String(bubbleAverage) +
-    "\n";
-  console.log(data);
-  //Write runtime data to csv file
+  data = `BUBBLE SORT,${n}, ${bubbleAverage}\n`;
   fs.appendFile("sortingAlgRuntimes.csv", data, (err) => {
     if (err) throw err;
   });
 }
 
 //SELECTION SORT CALLS & CALCULATIONS
-for (let n = 0; n <= arraySizes.length; n++) {
+for (let n = 101000; n <= 200000; n = n + 1000) {
   const randomNumberArr = [];
-  console.log("Sorting with N = ", arraySizes[n]);
+  console.log("Selection Sorting with N = ", n);
 
-  for (let i = 0; i < arraySizes[n]; i++) {
-    randomNumberArr.push(Math.floor(Math.random() * 100));
+  for (let i = 0; i < n; i++) {
+    randomNumberArr.push(Math.floor(Math.random() * n));
   }
 
   let selectionTotal = 0;
   let selectionAverage = 0;
 
   for (let r = 1; r <= runs; r++) {
+    let randomNumberArrCopy = [...randomNumberArr];
     timestart = performance.now();
-    console.log("r = ", r, "starting at", timestart);
-    selectionSort(randomNumberArr);
+    selectionSort(randomNumberArrCopy);
     runtime = performance.now() - timestart;
     selectionTotal += runtime;
   }
 
-  console.log("Current total: " + selectionTotal);
   selectionAverage = selectionTotal / runs;
-  data =
-    "SELECTION SORT: Size " +
-    String(arraySizes[n]) +
-    ", Average Runtime: " +
-    String(selectionAverage) +
-    "\n";
-  console.log(data);
+  data = `SELECTION SORT, ${n}, ${selectionAverage}\n`;
   fs.appendFile("sortingAlgRuntimes.csv", data, (err) => {
     if (err) throw err;
   });
 }
 
 //INSERTION SORT CALLS & CALCULATIONS
-for (let n = 0; n <= arraySizes.length; n++) {
+for (let n = 101000; n <= 200000; n = n + 1000) {
   //Declare empty array and fill with random numbers according to n array size
   const randomNumberArr = [];
-  console.log("Sorting with N = ", arraySizes[n]);
+  console.log("Insertion Sorting with N = ", n);
 
-  for (let i = 0; i < arraySizes[n]; i++) {
-    randomNumberArr.push(Math.floor(Math.random() * 100));
+  for (let i = 0; i < n; i++) {
+    randomNumberArr.push(Math.floor(Math.random() * n));
   }
 
   let insertionTotal = 0;
   let insertionAverage = 0;
 
   for (let r = 1; r <= runs; r++) {
+    let randomNumberArrCopy = [...randomNumberArr];
     timestart = performance.now();
-    console.log("r = ", r, "starting at", timestart);
-    insertionSort(randomNumberArr);
+    insertionSort(randomNumberArrCopy);
     runtime = performance.now() - timestart;
     insertionTotal += runtime;
   }
 
-  console.log("Current total: " + insertionTotal);
   insertionAverage = insertionTotal / runs;
-  data =
-    "INSERTION SORT: Size " +
-    String(n) +
-    ", Average Runtime: " +
-    String(insertionAverage) +
-    "\n";
-  console.log(data);
+  data = `INSERTION SORT, ${n}, ${insertionAverage}\n`;
+
   fs.appendFile("sortingAlgRuntimes.csv", data, (err) => {
     if (err) throw err;
   });
 }
 
-for (let n = 0; n <= arraySizes.length; n++) {
-  //Declare empty array and fill with random numbers according to n array size
+//MERGE SORT CALLS & CALCULATIONS
+for (let n = 101000; n <= 200000; n = n + 1000) {
   const randomNumberArr = [];
-  console.log("Sorting with N = ", arraySizes[n]);
-  for (let i = 0; i < arraySizes[n]; i++) {
-    randomNumberArr.push(Math.floor(Math.random() * 100));
+  console.log("Merge Sorting with N = ", n);
+  for (let i = 0; i < n; i++) {
+    randomNumberArr.push(Math.floor(Math.random() * n));
   }
 
   let mergeTotal = 0;
   let mergeAverage = 0;
   for (let r = 1; r <= runs; r++) {
+    let randomNumberArrCopy = [...randomNumberArr];
     timestart = performance.now();
-    console.log("r = ", r, "starting at", timestart);
-    mergeSort(randomNumberArr);
+    mergeSort(randomNumberArrCopy);
     runtime = performance.now() - timestart;
     mergeTotal += runtime;
   }
-  console.log("Current total: " + mergeTotal);
+
   mergeAverage = mergeTotal / runs;
-  data =
-    "MERGE SORT: Size " +
-    String(arraySizes[n]) +
-    ", Average Runtime: " +
-    String(mergeAverage) +
-    "\n";
-  console.log(data);
+  data = `MERGE SORT, ${n}, ${mergeAverage}\n`;
+
   fs.appendFile("sortingAlgRuntimes.csv", data, (err) => {
     if (err) throw err;
   });
+
+  console.log("Algorithm runs complete!");
 }
