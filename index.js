@@ -4,16 +4,16 @@ const { performance } = require("perf_hooks");
 
 // WRITING DATA TO FILE
 // delete output csv file if exists
-// if (fs.existsSync("sortingAlgRuntimes.csv"))
-//   fs.unlinkSync("sortingAlgRuntimes.csv");
-// // create and write a header to the output csv file
-// fs.appendFile(
-//   "sortingAlgRuntimes.csv",
-//   "Sort Type, N, Average Runtime, Sort Type, N, Average Runtime, Sort Type, N, Average Runtime, Sort Type, N, Average Runtime\n",
-//   (err) => {
-//     if (err) throw err;
-//   }
-// );
+if (fs.existsSync("sortingAlgRuntimes.csv"))
+  fs.unlinkSync("sortingAlgRuntimes.csv");
+// create and write a header to the output csv file
+fs.appendFile(
+  "sortingAlgRuntimes.csv",
+  "Sort Type, N, Average Runtime, Sort Type, N, Average Runtime, Sort Type, N, Average Runtime, Sort Type, N, Average Runtime\n",
+  (err) => {
+    if (err) throw err;
+  }
+);
 
 //BUBBLE SORT
 function bubbleSort(arr) {
@@ -92,7 +92,7 @@ function mergeSort(arr) {
 //Declare runs
 const runs = 10;
 //run sorts for varying data sizes N
-for (let n = 101000; n <= 200000; n = n + 1000) {
+for (let n = 1000; n <= 200000; n = n + 1000) {
   console.log("Bubble Sorting with N = ", n);
   //Declare empty array and fill with random numbers according to n array size and print sort type and n to console
   const randomNumberArr = [];
@@ -128,7 +128,7 @@ for (let n = 101000; n <= 200000; n = n + 1000) {
 }
 
 //SELECTION SORT CALLS & CALCULATIONS
-for (let n = 101000; n <= 200000; n = n + 1000) {
+for (let n = 1000; n <= 200000; n = n + 1000) {
   const randomNumberArr = [];
   console.log("Selection Sorting with N = ", n);
 
@@ -155,7 +155,7 @@ for (let n = 101000; n <= 200000; n = n + 1000) {
 }
 
 //INSERTION SORT CALLS & CALCULATIONS
-for (let n = 101000; n <= 200000; n = n + 1000) {
+for (let n = 1000; n <= 200000; n = n + 1000) {
   //Declare empty array and fill with random numbers according to n array size
   const randomNumberArr = [];
   console.log("Insertion Sorting with N = ", n);
@@ -184,7 +184,7 @@ for (let n = 101000; n <= 200000; n = n + 1000) {
 }
 
 //MERGE SORT CALLS & CALCULATIONS
-for (let n = 101000; n <= 200000; n = n + 1000) {
+for (let n = 1000; n <= 200000; n = n + 1000) {
   const randomNumberArr = [];
   console.log("Merge Sorting with N = ", n);
   for (let i = 0; i < n; i++) {
